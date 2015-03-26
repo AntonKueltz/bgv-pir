@@ -21,7 +21,6 @@
 
 #define DEBUG false
 #define FOLD  false
-#define PIR   true
 #define TIMED true
 
 using namespace std;
@@ -42,91 +41,78 @@ FHEcontext initBGV(long p){
     FHEcontext context(m,p,r);
     buildModChain(context, L, c);
     return context;
-} 
+}
 
 int main(int argc, char * argv[]){
-    if(PIR){
-        // get the index to retrieve and the field data is over
-        unsigned long i = 9;
-        if(argc > 1) i = atol(argv[1]);
-        long p = 2;
-        if (argc > 2) p = atol(argv[2]);
-        unsigned long n_ = 1;
-        if (argc > 3) n_ = atol(argv[3]);
+    // get the index to retrieve and the field data is over
+    unsigned long i = 0;
+    if(argc > 1) i = atol(argv[1]);
+    long p = 2;
+    if (argc > 2) p = atol(argv[2]);
+    unsigned long n_ = 1;
 
-        // set up BGV context and keys (CLIENT)
-        auto t1 = chrono::high_resolution_clock::now();
-        FHEcontext context = initBGV(p);
-        FHESecKey secretKey(context);
-        const FHEPubKey & publicKey = secretKey;
-        secretKey.GenSecKey(64);
-        addSome1DMatrices(secretKey);
-        auto t2 = chrono::high_resolution_clock::now();
+    // set up BGV context and keys (CLIENT)
+    auto t1 = chrono::high_resolution_clock::now();
+    FHEcontext context = initBGV(p);
+    FHESecKey secretKey(context);
+    const FHEPubKey & publicKey = secretKey;
+    secretKey.GenSecKey(64);
+    addSome1DMatrices(secretKey);
+    auto t2 = chrono::high_resolution_clock::now();
 
-        if(DEBUG) cout << "Generated Key Pair" << endl;
-        if(TIMED){
-            auto t = chrono::duration_cast<chrono::milliseconds>(t2-t1).count();
-            cout << "Initialized BGV params in: " << t/1000.0 << "s" << endl;
-        } 
-
-        t1 = chrono::high_resolution_clock::now();
-        // generate the DB based on our parameters
-        EncryptedArray ea(context);
-        // n_ must be a power of 2
-        unsigned long l = ea.size();
-        vector<vector<long> > db;
-        util::generateDB(db, n_, l, p);
-        t2 = chrono::high_resolution_clock::now();
-
-        if(DEBUG){
-            util::printDB(db);
-        }
-        cout << "DB size is " << db.size() * db[0].size() << " elements" << endl;
-        if(TIMED){
-            auto t = chrono::duration_cast<chrono::milliseconds>(t2-t1).count();
-            cout << "Generated DB in: " << t/1000.0 << "s" << endl;
-        } 
-
-        t1 = chrono::high_resolution_clock::now();
-        // create the client
-        PIRClient client(i, l);
-
-        // generate the encrypted query (CLIENT)
-        vector<long> s = client.queryGen(i, n_, l);
-        if(DEBUG){
-            cout << "Rotatated Query is: ";
-            util::printVector(s);
-        }
-        Ctxt ctxt = client.encryptQuery(s, ea, publicKey);
-
-        // create the server
-        PIRServer server(db);
-
-        // generate the reply (SERVER)
-        vector<Ctxt> reply = server.replyGen(ctxt, ea);
-
-        // extract the bit from the reply (CLIENT)
-        long replyBit = client.replyExtract(reply, ea, secretKey);
-        t2 = chrono::high_resolution_clock::now();
-        cout << "\nRetrieved element @" << i << ": " << replyBit << endl;
-
-        // compare against actual bit
-        long actualBit = db[i/l][i%l];
-        cout << "Actual element @" << i << ": " << actualBit << endl;
-
-        if(TIMED){
-            auto t = chrono::duration_cast<chrono::milliseconds>(t2-t1).count();
-            cout << "Ran BGV PIR request and reply in: " << t/1000.0 << "s" << endl;
-        }  
+    if(DEBUG) cout << "Generated Key Pair" << endl;
+    if(TIMED){
+        auto t = chrono::duration_cast<chrono::milliseconds>(t2-t1).count();
+        cout << "Initialized BGV params in: " << t/1000.0 << "s" << endl;
     }
-    else{
-        string searchStr = "1000000000000000";
-        FoldingTree ft(searchStr.length());
 
-        if(DEBUG) cout << "Original query: " << searchStr << endl;
-        string folded = ft.fold(ft.root, searchStr);
-        if(DEBUG) cout << "Folded query: " << folded << endl;
-        string unfolded = ft.unfold(ft.root, folded);
-        if(DEBUG) cout << "Unfolded query: " << unfolded << endl;
+    t1 = chrono::high_resolution_clock::now();
+    // generate the DB based on our parameters
+    EncryptedArray ea(context);
+    // n_ must be a power of 2
+    unsigned long l = ea.size();
+    vector<vector<long> > db;
+    util::generateDB(db, n_, l, p);
+    t2 = chrono::high_resolution_clock::now();
+
+    if(DEBUG){
+        util::printDB(db);
+        cout << "DB size is " << db.size() * db[0].size() << " elements" << endl;
+    }
+    if(TIMED){
+        auto t = chrono::duration_cast<chrono::milliseconds>(t2-t1).count();
+        cout << "Generated DB in: " << t/1000.0 << "s" << endl;
+    }
+
+    t1 = chrono::high_resolution_clock::now();
+    // create the client
+    PIRClient client(i, l);
+
+    // generate the encrypted query (CLIENT)
+    vector<long> s = client.queryGen(i, n_, l);
+    if(DEBUG){
+        cout << "Rotatated Query is: ";
+        util::printVector(s);
+    }
+    Ctxt ctxt = client.encryptQuery(s, ea, publicKey);
+
+    // create the server
+    PIRServer server(db);
+
+    // generate the reply (SERVER)
+    vector<Ctxt> reply = server.replyGen(ctxt, ea);
+
+    // extract the bit from the reply (CLIENT)
+    long replyBit = client.replyExtract(reply, ea, secretKey);
+    t2 = chrono::high_resolution_clock::now();
+    cout << "\nRetrieved element @" << i << ": " << replyBit << endl;
+
+    // compare against actual bit
+    long actualBit = db[i/l][i%l];
+    cout << "Actual element @" << i << ": " << actualBit << endl;
+
+    if(TIMED){
+        auto t = chrono::duration_cast<chrono::milliseconds>(t2-t1).count();
+        cout << "Ran BGV PIR request and reply in: " << t/1000.0 << "s" << endl;
     }
 }
