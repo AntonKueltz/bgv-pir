@@ -13,7 +13,7 @@ To build the program simply run make in the src directory (Currently the makefil
 There are several parameters that can be passed to the executable. The first one is the query index, which indicates which element in the DB to retrieve. This value can be anywhere in the range [0, # of DB elements). The second parameter denotes the order of the finite field that all database elements are in. This value MUST be a prime. The defaults are query index = 0 and finite field order = 2 (i.e. all DB elements are either 0 or 1).
 
 # Acknowledgements
-This work would not be possible without the awesome[HElib](https://github.com/shaih/HElib) and [NTL](http://www.shoup.net/ntl/) libraries. For more information on them you can start [here](https://eprint.iacr.org/2014/106.pdf) and [here](http://www.cs.dartmouth.edu/~ccpalmer/classes/cs50/Content/Resources/refman.pdf).
+This work would not be possible without the awesome [HElib](https://github.com/shaih/HElib) and [NTL](http://www.shoup.net/ntl/) libraries. For more information on them you can start [here](https://eprint.iacr.org/2014/106.pdf) and [here](http://www.cs.dartmouth.edu/~ccpalmer/classes/cs50/Content/Resources/refman.pdf).
 
 # TL;DR
 1. $ ./install_HElib
