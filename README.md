@@ -1,5 +1,5 @@
 # About
-This is a [Private Information Retrieval (PIR)](http://en.wikipedia.org/wiki/Private_information_retrieval) implementation built on top of [HElib](https://github.com/shaih/HElib/). HElib implements the crypto system described in [Fully Homomorphic Encryption without Bootstrapping](http://eprint.iacr.org/2011/277.pdf) by Brakerski, Gentry and Vaikuntanathan. The description of this specific PIR protocol can be found in [this paper](https://personal.cis.strath.ac.uk/changyu.dong/papers/pir.pdf).
+This is a [Private Information Retrieval (PIR)](http://en.wikipedia.org/wiki/Private_information_retrieval) implementation built on top of [HElib](https://github.com/shaih/HElib/). HElib implements the crypto system described in [Fully Homomorphic Encryption without Bootstrapping](http://eprint.iacr.org/2011/277.pdf) by Brakerski, Gentry and Vaikuntanathan. The description of this specific PIR protocol can be found in [this paper](https://personal.cis.strath.ac.uk/changyu.dong/papers/pir.pdf). Distribution is under the terms of the [GNU General Public License](http://www.gnu.org/licenses/gpl.html) (GPL).
 
 # Setup & Dependencies
 ### Installing HElib
