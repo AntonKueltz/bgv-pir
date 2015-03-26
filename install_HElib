@@ -1,0 +1,37 @@
+# get GMP
+wget https://gmplib.org/download/gmp/gmp-6.0.0a.tar.bz2
+tar -xvf gmp-6.0.0a.tar.bz2
+rm gmp-6.0.0a.tar.bz2
+
+# install GMP
+cd gmp-6.0.0
+./configure
+make
+sudo make install
+make check
+
+# back to top level dir
+cd ..
+
+# get NTL
+wget http://www.shoup.net/ntl/ntl-8.1.2.tar.gz
+tar -xvf ntl-8.1.2.tar.gz
+rm ntl-8.1.2.tar.gz
+
+# install NTL
+cd ntl-8.1.2/src
+./configure NTL_GMP_LIP=on
+make
+sudo make install
+
+# back to top level dir
+cd ../..
+
+# clone & install HElib
+git clone git@github.com:shaih/HElib.git
+cd HElib/src
+
+# do some magic before making HElib
+# 1. add " -std=c++11" to the end of line 18 of the Makefile
+# 2. remove "=40" from line 1394 in NumbTh.cpp (Breaks C++11 Standard)
+make
