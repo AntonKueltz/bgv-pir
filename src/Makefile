@@ -24,7 +24,7 @@ LFLAGS = -L/usr/lib -lntl -lgmp $(HELIB)/src/fhe.a
 all: App
 
 App: $(OBJS)
-	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) $(OBJS) -o App
+	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) $(OBJS) -o PIR
 
 Main.o: Main.cpp
 	$(CC) $(CFLAGS) $(IFLAGS) -c Main.cpp
@@ -42,6 +42,6 @@ FoldingTree.o: FoldingTree.cpp
 	$(CC) $(CFLAGS) $(IFLAGS) -c FoldingTree.cpp 
 
 clean:
-	rm *o App
+	rm *o PIR
 endif
 
