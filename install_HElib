@@ -14,12 +14,12 @@ make check
 cd ..
 
 # get NTL
-wget http://www.shoup.net/ntl/ntl-8.1.2.tar.gz
-tar -xvf ntl-8.1.2.tar.gz
-rm ntl-8.1.2.tar.gz
+wget http://www.shoup.net/ntl/ntl-9.0.2.tar.gz
+tar -xvf ntl-9.0.2.tar.gz
+rm ntl-9.0.2.tar.gz
 
 # install NTL
-cd ntl-8.1.2/src
+cd ntl-9.0.2/src
 ./configure NTL_GMP_LIP=on
 make
 sudo make install
@@ -35,3 +35,6 @@ cd HElib/src
 # 1. add " -std=c++11" to the end of line 18 of the Makefile
 # 2. remove "=40" from line 1394 in NumbTh.cpp (Breaks C++11 Standard)
 make
+
+# export HELIB path
+export HELIB=./HElib

@@ -1,6 +1,11 @@
 # C++ Stuff
 *.o
 
+# Dependency Folders
+HElib
+gmp-6.0.0
+ntl-9.0.2
+
 # Executables
 App
 PIR
