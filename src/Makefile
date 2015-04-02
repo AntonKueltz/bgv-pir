@@ -3,13 +3,13 @@ OBJS = Main.o PIRServer.o PIRClient.o Util.o FoldingTree.o
 IFLAGS = -I$(HELIB)/src
 UNAME = $(shell uname)
 
-# COMPILE FOR LINUX (THIS SHIT IS BROKEN FOR THE MOMENT)
+# COMPILE FOR LINUX
 ifeq ($(UNAME), Linux)
 LFLAGS = $(HELIB)/src/fhe.a -lntl -lgmp -L/usr/lib
 CC = g++
 endif
 
-# COMPILE FOR OSX (WORKS LIKE A CHARM)
+# COMPILE FOR OSX
 ifeq ($(UNAME), Darwin)
 LFLAGS = -L/usr/lib -lntl -lgmp $(HELIB)/src/fhe.a
 CC = clang++
