@@ -1,30 +1,13 @@
-CFLAGS = -std=c++11
+CFLAGS = -g -Wfatal-errors -Wshadow -Wall -std=c++11
 OBJS = Main.o PIRServer.o PIRClient.o Util.o FoldingTree.o
-IFLAGS = -I$(HELIB)/src
-UNAME = $(shell uname)
-
-# COMPILE FOR LINUX (THIS SHIT IS BROKEN FOR THE MOMENT)
-ifeq ($(UNAME), Linux)
+IFLAGS = -I/usr/local/include -I$(HELIB)/src
+LFLAGS = $(HELIB)/src/fhe.a -L/usr/local/lib -lntl -lgmp -lm
 CC = g++
-LFLAGS = -L/usr/lib -lntl -lgmp $(HELIB)/src/fhe.a
-
-all :
-	$(CC) Folding.cpp PIR.cpp $(IFLAGS) -o App $(LFLAGS) $(CFLAGS)
-
-clean :
-	rm *o App
-
-endif
-
-# COMPILE FOR OSX (WORKS LIKE A CHARM)
-ifeq ($(UNAME), Darwin)
-CC = clang++
-LFLAGS = -L/usr/lib -lntl -lgmp $(HELIB)/src/fhe.a
 
 all: App
 
 App: $(OBJS)
-	$(CC) $(CFLAGS) $(IFLAGS) $(LFLAGS) $(OBJS) -o PIR
+	$(CC) $(CFLAGS) $(IFLAGS) -o PIR $(OBJS) $(LFLAGS)
 
 Main.o: Main.cpp
 	$(CC) $(CFLAGS) $(IFLAGS) -c Main.cpp
@@ -39,9 +22,7 @@ Util.o: Util.cpp
 	$(CC) $(CFLAGS) -c Util.cpp
 
 FoldingTree.o: FoldingTree.cpp
-	$(CC) $(CFLAGS) $(IFLAGS) -c FoldingTree.cpp 
+	$(CC) $(CFLAGS) $(IFLAGS) -c FoldingTree.cpp
 
 clean:
 	rm *o PIR
-endif
-

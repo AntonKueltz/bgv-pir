@@ -15,11 +15,10 @@ PIRClient::PIRClient(unsigned long i, unsigned long l){
 vector<long> PIRClient::queryGen(unsigned long i, unsigned long n, unsigned long l){
     if(DEBUG) cout << "\nQuery alpha: " << alpha << " beta: " << beta << endl;
 
-    // generate query string
-    string q;
+    // generate query
+    vector<long> q;
     for(unsigned long j = 0; j < n; ++j){
-        if(j == alpha) q.push_back('1');
-        else q.push_back('0');
+        q.push_back(j == alpha ? 1 : 0);
     }
 
     if(DEBUG){
@@ -30,9 +29,8 @@ vector<long> PIRClient::queryGen(unsigned long i, unsigned long n, unsigned long
     // TODO - All these strings should really be vector<long>s
     if(FOLD){
         // fold the query
-        Node * root = new Node; 
         FoldingTree ft(n);
-        string s = ft.fold(ft.root, q);
+        vector<long> s = ft.fold(ft.root, q);
 
         if(DEBUG){
             cout << "Folded Query is: ";
@@ -40,7 +38,7 @@ vector<long> PIRClient::queryGen(unsigned long i, unsigned long n, unsigned long
         }
 
         // pad and shift s
-        while(s.length() < l) s.push_back('0');
+        while(s.size() < l) s.push_back(0);
         return util::circShiftRight(s, beta);
     }
     else{

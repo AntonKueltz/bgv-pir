@@ -8,6 +8,7 @@
 
 // HElib files
 #include "FHE.h"
+#include "FHEContext.h"
 #include "EncryptedArray.h"
 
 // NTL files
@@ -26,19 +27,21 @@
 using namespace std;
 
 FHEcontext initBGV(long p){
-    // p is the plaintext base [default=2]
-    long r = 1; // r is the lifting [default=1]
-    long d = 1; // d is the degree of the field extension [default==1]
-                // (d == 0 => factors[0] defined the extension)
-    long c = 2; // c is number of columns in the key-switching matrices [default=2]
+                 // p is the plaintext base [default=2]
+    long r = 1;  // r is the lifting [default=1]
+    long d = 1;  // d is the degree of the field extension [default==1]
+                 // (d == 0 => factors[0] defined the extension)
+    long c = 2;  // c is number of columns in the key-switching matrices [default=2]
     long k = 80; // k is the security parameter [default=80]
-    long L = 4; // L is the # of primes in the modulus chain [default=4*R]
-    long s = 0; // s is the minimum number of slots [default=4]
+    long L = 4;  // L is the # of primes in the modulus chain [default=4*R]
+    long s = 0;  // s is the minimum number of slots [default=4]
+
     // WTF HOW DOES M WORK SOMEONE EXPLAIN
     // I THOUGHT d = phi(m) / l WHERE l = slots??????
     long m = FindM(k, L, c, p, d, s, 0); // 1003
 
-    FHEcontext context(m,p,r);
+    vector<long> a, b;
+    FHEcontext context(m, p, r, a, b);
     buildModChain(context, L, c);
     return context;
 }

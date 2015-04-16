@@ -13,11 +13,11 @@ void FoldingTree::buildTree(Node * node, unsigned long n){
     if(node == 0) node = new Node;
     node->slen = n;
     node->left = 0;
-    node->right = 0;    
+    node->right = 0;
 
     // base case
     if(n == 2) return;
-    
+
     // clang ceil() promotes an int up to the next int (IDIOTIC)
     // removed ceil() call as a result...
     unsigned long n1 = (int)(log2(n) / 2.0);
@@ -27,7 +27,7 @@ void FoldingTree::buildTree(Node * node, unsigned long n){
 
     // recursive case
     buildTree(node->left, (unsigned long)pow(2, n1));
-    buildTree(node->right, (unsigned long)pow(2, n2));  
+    buildTree(node->right, (unsigned long)pow(2, n2));
 }
 
 void FoldingTree::destroyTree(Node * node){
@@ -46,17 +46,17 @@ void FoldingTree::printTree(Node * node){
     }
 }
 
-string FoldingTree::fold(Node * node, string query){
+vector<long> FoldingTree::fold(Node * node, vector<long> query){
     // base case
-    if(node->left == 0 && node->right == 0) return query;    
-    
+    if(node->left == 0 && node->right == 0) return query;
+
     unsigned long d1 = node->left->slen;
     unsigned long d2 = node->right->slen;
 
     // find the search bit
     unsigned long j = 0;
-    for(unsigned long i = 0; i < query.length(); ++i){
-        if(query[i] == '1'){
+    for(unsigned long i = 0; i < query.size(); ++i){
+        if(query[i] == 1){
             j = i;
             break;
         }
@@ -65,27 +65,27 @@ string FoldingTree::fold(Node * node, string query){
     // compute new "folded" query strings
     unsigned long alpha = floor(j / d2);
     unsigned long beta = j % d2;
-    string l;    
-    string r;
+    vector<long> l;
+    vector<long> r;
 
     for(unsigned long i = 0; i < d1; ++i){
-        if(i == alpha) l.push_back('1');
-        else l.push_back('0');
+        l.push_back(i == alpha ? 1 : 0);
     }
 
     for(unsigned long i = 0; i < d2; ++i){
-        if(i == beta) r.push_back('1');
-        else r.push_back('0');    
+        r.push_back(i == beta ? 1 : 0);
     }
 
     // recursive case
-    string a = fold(node->left, l);
-    string b = fold(node->right, r);
+    vector<long> a = fold(node->left, l);
+    vector<long> b = fold(node->right, r);
 
-    return a.append(b);
+    // combine the vectors (TODO probably better way to do this)
+    for(unsigned long i = 0; i < b.size(); ++i) a.push_back(b[i]);
+    return a;
 }
 
-string FoldingTree::unfold(Node * node, string query){
+vector<long> FoldingTree::unfold(Node * node, vector<long> query){
     // base case
     if(node->left == 0 && node->right == 0) return query;
 
@@ -95,29 +95,29 @@ string FoldingTree::unfold(Node * node, string query){
     unsigned long gamma2 = 2 * (unsigned long)log2(d2);
 
     // split the query i.e. "unfold" it
-    string sl;
-    string sr;
+    vector<long> sl;
+    vector<long> sr;
 
-    for(unsigned long i = 0; i < gamma1; ++i) 
+    for(unsigned long i = 0; i < gamma1; ++i)
         sl.push_back(query[i]);
     for(unsigned long i = gamma1; i < gamma1+gamma2; ++i)
         sr.push_back(query[i]);
 
     // recursive case
-    string l = unfold(node->left, sl);
-    string r = unfold(node->right, sr);
+    vector<long> l = unfold(node->left, sl);
+    vector<long> r = unfold(node->right, sr);
 
     // combine the two strings
-    string q;
-    q.assign(d1 * d2, '0');
+    vector<long> q;
+    for(unsigned long i = 0; i < d1 * d2; ++i) q.push_back(0);
 
     for(unsigned long a = 0; a < d1; ++a){
         for(unsigned long b = 0; b < d2; ++b){
             unsigned long i = a * d2 + b;
-            
+
             // some "casting" has to happen since we have chars but need to
             // operate on integers
-            q[i] = (l[a] - '0') * (r[b] - '0') + '0'; 
+            q[i] = l[a] * r[b];
         }
     }
 
@@ -138,7 +138,7 @@ Ctxt FoldingTree::unfold(Node * node, Ctxt query){
     Ctxt sr(query.getPubKey(), query.getPtxtSpace());
 
     /* TODO - Make Homomorphic
-    for(unsigned long i = 0; i < gamma1; ++i) 
+    for(unsigned long i = 0; i < gamma1; ++i)
         sl.push_back(query[i]);
     for(unsigned long i = gamma1; i < gamma1+gamma2; ++i)
         sr.push_back(query[i]);
@@ -156,10 +156,10 @@ Ctxt FoldingTree::unfold(Node * node, Ctxt query){
     for(unsigned long a = 0; a < d1; ++a){
         for(unsigned long b = 0; b < d2; ++b){
             unsigned long i = a * d2 + b;
-            
+
             // some "casting" has to happen since we have chars but need to
             // operate on integers
-            q[i] = (l[a] - '0') * (r[b] - '0') + '0'; 
+            q[i] = (l[a] - '0') * (r[b] - '0') + '0';
         }
     }
     */

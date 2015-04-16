@@ -26,13 +26,13 @@ namespace util{
         }
     }
 
-    vector<long> circShiftRight(string s, unsigned long shift){
+    vector<long> circShiftRight(vector<long> v, unsigned long shift){
         vector<long> shifted;
-        unsigned long slen = s.length();
+        unsigned long slen = v.size();
 
         for(unsigned long i = 0; i < slen; ++i){
             unsigned long shiftIndex = (i + slen - shift) % slen;
-            shifted.push_back(s[shiftIndex] == '1' ? 1 : 0);
+            shifted.push_back(v[shiftIndex]);
         }
 
         return shifted;
@@ -47,6 +47,6 @@ namespace util{
             shifted.push_back(v[shiftIndex]);
         }
 
-        return shifted; 
+        return shifted;
     }
 }

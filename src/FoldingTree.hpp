@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "FHE.h"
 
@@ -23,7 +24,7 @@ public:
     // CONSTRUCTORS & DESTRUCTORS
     /* PARAMS:
      *         n - the length of the original query to be folded
-     * 
+     *
      * Method delegates to buildTree
      */
     FoldingTree(unsigned long n);
@@ -36,13 +37,13 @@ public:
     // METHODS
     /* PARAMS:
      *        node - the node that will be the root of the tree
-     *        n - the length of the query string at this level 
+     *        n - the length of the query string at this level
      *          (must be a power of 2)
      *
      * Method recursively builds a folding tree. Since n is a power of 2
      * it can be written as 2^x. The value of n for the child nodes is then
      * 2^(x/2) if x is even, and 2^(x/2 + 1), 2^(x/2) for left and right child
-     * respectively if x is odd. When x is 1 the current node will be a leaf. 
+     * respectively if x is odd. When x is 1 the current node will be a leaf.
      */
     void buildTree(Node * node, unsigned long n);
 
@@ -75,12 +76,12 @@ public:
      * bit matrix. The left and right childs queries are the row and column
      * (respectively) that contain the 1 bit in the matrix, represented as bit
      * vectors.
-     * 
+     *
      * RETURN:
      *         A string that is the concatentation of all the queries at the leaf
      *        node level from leftmost leaf to rightmost leaf.
      */
-    string fold(Node * node, string query);
+    vector<long> fold(Node * node, vector<long> query);
 
     /* PARAMS:
      *        node - must be the root node for this procedure to work correctly.
@@ -88,12 +89,12 @@ public:
      *                via the fold method.
      *
      * Unfolds a folded query back into it's original bit vector representation.
-     * 
+     *
      * RETURN:
-     *         a bit vector representing a query to retrieve index i. All bits are 
+     *         a bit vector representing a query to retrieve index i. All bits are
      *        set to 0, except the ith bit which is set to 1.
      */
-    string unfold(Node * node, string query);
+    vector<long> unfold(Node * node, vector<long> query);
 
     /* PARAMS:
      *        node - must be the root node for this procedure to work correctly.
@@ -101,7 +102,7 @@ public:
      *                via the fold method and encrypted via a FHE scheme.
      *
      * Unfolds a folded query back into it's original bit vector representation.
-     * 
+     *
      * RETURN:
      *         an encrypted bit vector representing a query to retrieve index i.
      */
