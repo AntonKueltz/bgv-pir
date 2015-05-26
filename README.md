@@ -5,8 +5,8 @@ This is a [Private Information Retrieval (PIR)](http://en.wikipedia.org/wiki/Pri
 ### Installing HElib
 I have included a script (install_HElib) that can be run from terminal to install HElib and all of it's dependencies. If the script doesn't work you can always refer [here](https://github.com/shaih/HElib/blob/master/INSTALL.txt) for manual installation instructions. A common issue is that the makefile does not use the `-std=c++11` flag to compile HElib. To fix this the following should be done:
 
-1. uncomment line 18 of HElib/src/Makefile and add " -std=c++11" to the end of the line.
-2. remove "=40" from line 1394 in HElib/src/NumbTh.cpp (c++11 doesn't like this for some reason).
+* uncomment line 18 of HElib/src/Makefile and add ``` -std=c++11``` to the end of the line.
+* comment out line 45 ```CFLAGS = -g -O2```
 
 ### Environment Config
 In order to build the program the makefile needs to know where the HElib directory is. Set the HElib directory as an environment variable. (e.g. `export HELIB=/path/to/HElib`, I recommend putting this in your bash profile). You should also have a C++ compiler that supports C++11 (e.g. Clang 3.3 and later, GCC 4.7 and later).
