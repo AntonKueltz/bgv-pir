@@ -20,7 +20,7 @@
 #include "PIRServer.hpp"
 #include "Util.hpp"
 
-#define DEBUG true
+#define DEBUG false
 #define FOLD  false
 #define TIMED true
 
@@ -80,10 +80,6 @@ int main(int argc, char * argv[]){
         util::printDB(db);
         cout << "DB size is " << db.size() * db[0].size() << " elements" << endl;
     }
-    if(TIMED){
-        auto t = chrono::duration_cast<chrono::milliseconds>(t2-t1).count();
-        cout << "Generated DB in: " << t/1000.0 << "s" << endl;
-    }
 
     t1 = chrono::high_resolution_clock::now();
     // create the client
@@ -106,7 +102,7 @@ int main(int argc, char * argv[]){
     // extract the bit from the reply (CLIENT)
     long replyBit = client.replyExtract(reply, ea, secretKey);
     t2 = chrono::high_resolution_clock::now();
-    cout << "\nRetrieved element @" << i << ": " << replyBit << endl;
+    cout << "Retrieved element @" << i << ": " << replyBit << endl;
 
     // compare against actual bit
     long actualBit = db[i/l][i%l];
@@ -114,6 +110,7 @@ int main(int argc, char * argv[]){
 
     if(TIMED){
         auto t = chrono::duration_cast<chrono::milliseconds>(t2-t1).count();
-        cout << "Ran BGV PIR request and reply in: " << t/1000.0 << "s" << endl;
+        cout << "Ran BGV PIR request and reply in: " << t/1000.0 << "s on db "
+            "with " << db.size() * db[0].size() << " entries" << endl;
     }
 }
