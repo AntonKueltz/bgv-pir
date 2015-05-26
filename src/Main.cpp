@@ -20,7 +20,7 @@
 #include "PIRServer.hpp"
 #include "Util.hpp"
 
-#define DEBUG false
+#define DEBUG true
 #define FOLD  false
 #define TIMED true
 
@@ -48,11 +48,9 @@ FHEcontext initBGV(long p){
 
 int main(int argc, char * argv[]){
     // get the index to retrieve and the field data is over
-    unsigned long i = 0;
-    if(argc > 1) i = atol(argv[1]);
-    long p = 2;
-    if (argc > 2) p = atol(argv[2]);
-    unsigned long n_ = 1;
+    unsigned long i = (argc > 1) ? atol(argv[1]) : 0;
+    long p = (argc > 2) ? atol(argv[2]) : 2;
+    unsigned long n_ = (argc > 3) ? atol(argv[3]) : 1;
 
     // set up BGV context and keys (CLIENT)
     auto t1 = chrono::high_resolution_clock::now();
