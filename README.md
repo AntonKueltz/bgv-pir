@@ -3,7 +3,7 @@ This is a [Private Information Retrieval (PIR)](http://en.wikipedia.org/wiki/Pri
 
 # Setup & Dependencies
 ### Installing HElib
-I have included a script (install_HElib) that can be run from terminal to install HElib and all of it's dependencies. If the script doesn't work you can always refer [here](https://github.com/shaih/HElib/blob/master/INSTALL.txt) for manual installation instructions. A common issue is that the makefile does not use the `-std=c++11` flag to compile HElib. To fix this the following should be done:
+I have included a script (install_HElib) that can be run from terminal to install HElib and all of it's dependencies (you'll probably want to run it with root permissions). If the script doesn't work you can always refer [here](https://github.com/shaih/HElib/blob/master/INSTALL.txt) for manual installation instructions. A common issue is that the makefile does not use the `-std=c++11` flag to compile HElib. To fix this the following should be done:
 
 * uncomment line 18 of HElib/src/Makefile and add ``` -std=c++11``` to the end of the line.
 * comment out line 45 ```CFLAGS = -g -O2```
