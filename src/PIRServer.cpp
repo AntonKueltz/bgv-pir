@@ -4,8 +4,10 @@
 
 #include <NTL/lzz_pXFactoring.h>
 
-#define DEBUG true
-#define FOLD  false // optimization not yet implemented
+#include "Flags.hpp"
+
+extern const bool DEBUG;
+extern const bool FOLD;
 
 PIRServer::PIRServer(vector<vector<long> > db_){
     db = db_;
@@ -20,7 +22,7 @@ vector<Ctxt> PIRServer::replyGen(Ctxt query, EncryptedArray & ea){
         for(unsigned long i = 0; i < n_; ++i){
             const Ctxt & tmp = query;
             cs.push_back(tmp);
-            ea.rotate(query, -1);  
+            ea.rotate(query, -1);
         }
 
         // unfold ciphertexts (TODO)

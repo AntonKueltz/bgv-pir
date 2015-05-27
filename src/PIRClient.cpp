@@ -1,11 +1,12 @@
 #include "PIRClient.hpp"
 
 // src files
+#include "Flags.hpp"
 #include "FoldingTree.hpp"
 #include "Util.hpp"
 
-#define DEBUG false
-#define FOLD  false // optimization not yet implemented
+extern const bool DEBUG;
+extern const bool FOLD;
 
 PIRClient::PIRClient(unsigned long i, unsigned long l){
     alpha = i / l;
@@ -13,7 +14,7 @@ PIRClient::PIRClient(unsigned long i, unsigned long l){
 }
 
 vector<long> PIRClient::queryGen(unsigned long i, unsigned long n, unsigned long l){
-    if(DEBUG) cout << "\nQuery alpha: " << alpha << " beta: " << beta << endl;
+    if(DEBUG) cout << "Query alpha: " << alpha << " beta: " << beta << endl;
 
     // generate query
     vector<long> q;
@@ -26,7 +27,6 @@ vector<long> PIRClient::queryGen(unsigned long i, unsigned long n, unsigned long
         cout << q << endl;
     }
 
-    // TODO - All these strings should really be vector<long>s
     if(FOLD){
         // fold the query
         FoldingTree ft(n);

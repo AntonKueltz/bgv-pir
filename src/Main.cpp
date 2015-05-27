@@ -15,14 +15,14 @@
 #include <NTL/lzz_pXFactoring.h>
 
 // My files
+#include "Flags.hpp"
 #include "FoldingTree.hpp"
 #include "PIRClient.hpp"
 #include "PIRServer.hpp"
 #include "Util.hpp"
 
-#define DEBUG false
-#define FOLD  false
-#define TIMED true
+extern const bool DEBUG;
+extern const bool TIMED;
 
 using namespace std;
 
@@ -36,7 +36,7 @@ FHEcontext initBGV(long p){
     long L = 4;  // L is the # of primes in the modulus chain [default=4*R]
     long s = 0;  // s is the minimum number of slots [default=4]
 
-    // WTF HOW DOES M WORK SOMEONE EXPLAIN
+    // TODO - HOW DOES M WORK SOMEONE EXPLAIN
     // I THOUGHT d = phi(m) / l WHERE l = slots??????
     long m = FindM(k, L, c, p, d, s, 0); // 1003
 
@@ -50,7 +50,15 @@ int main(int argc, char * argv[]){
     // get the index to retrieve and the field data is over
     unsigned long i = (argc > 1) ? atol(argv[1]) : 0;
     long p = (argc > 2) ? atol(argv[2]) : 2;
-    unsigned long n_ = (argc > 3) ? atol(argv[3]) : 1;
+    // n_ must be a power of 2
+    unsigned long n_ = (argc > 3) ? atol(argv[3]) : 2;
+
+    // power of two check, if n is a power of two it is 10000000... in binary
+    // and n-1 is 01111111... in binary, so the bitwise AND is 0
+    if(n_ & (n_ - 1)){
+        std::cerr << "n (param 3) must be a power of 2 (and >1) !" << std::endl;
+        return 0;
+    }
 
     // set up BGV context and keys (CLIENT)
     auto t1 = chrono::high_resolution_clock::now();
@@ -70,14 +78,13 @@ int main(int argc, char * argv[]){
     t1 = chrono::high_resolution_clock::now();
     // generate the DB based on our parameters
     EncryptedArray ea(context);
-    // n_ must be a power of 2
     unsigned long l = ea.size();
     vector<vector<long> > db;
     util::generateDB(db, n_, l, p);
     t2 = chrono::high_resolution_clock::now();
 
     if(DEBUG){
-        util::printDB(db);
+        // util::printDB(db);
         cout << "DB size is " << db.size() * db[0].size() << " elements" << endl;
     }
 

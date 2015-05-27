@@ -18,8 +18,6 @@ void FoldingTree::buildTree(Node * node, unsigned long n){
     // base case
     if(n == 2) return;
 
-    // clang ceil() promotes an int up to the next int (IDIOTIC)
-    // removed ceil() call as a result...
     unsigned long n1 = (int)(log2(n) / 2.0);
     unsigned long n2 = log2(n) - n1;
     node->left = new Node;
@@ -80,8 +78,8 @@ vector<long> FoldingTree::fold(Node * node, vector<long> query){
     vector<long> a = fold(node->left, l);
     vector<long> b = fold(node->right, r);
 
-    // combine the vectors (TODO probably better way to do this)
-    for(unsigned long i = 0; i < b.size(); ++i) a.push_back(b[i]);
+    // combine the vectors
+    a.insert(a.end(), b.begin(), b.end());
     return a;
 }
 
